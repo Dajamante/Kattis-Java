@@ -1,0 +1,2 @@
+# KattisEasy
+Easy exercises Kattis
