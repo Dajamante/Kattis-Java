@@ -1,2 +1,2 @@
-# KattisEasy
-Easy exercises Kattis
+# Kattis
+Kattis problems solved in Java.
