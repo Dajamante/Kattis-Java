@@ -4,70 +4,77 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         Kattio in = new Kattio(System.in, System.out);
+        //ArrayList<ArrayList<LinkedList<Integer>>> allGraphs = new ArrayList<>();
+        ArrayList<LinkedList<Integer>> smallGraph = new ArrayList<>();
+        int[] incoming;
+        int[] outgoing;
 
-        while (in.hasMoreTokens()){
+
+        while (in.hasMoreTokens()) {
             int numbVertices = in.getInt();
             int numTransitions = in.getInt();
 
-            Graph graphie = new Graph();
-
-            for (int i = 0; i < numTransitions ; i++) {
-                int from = in.getInt();
-                int to = in.getInt();
-                Graph.Node nFrom = graphie.new Node(from);
-                Graph.Node nTo = graphie.new Node(to);
-                Graph.Edge e = graphie.new Edge(from, to);
-                nFrom.edgies.add(e);
-
-                if (!graphie.nodies.contains(nFrom.id)) graphie.nodies.add(nFrom);
-                if (!graphie.nodies.contains(nTo.id)) graphie.nodies.add(nTo);
+            incoming = new int[numTransitions];
+            outgoing = new int[numTransitions];
 
 
+            for (int i = 0; i < numbVertices; i++) {
+                smallGraph.add(new LinkedList<>());
             }
-
-            for (Graph.Node n: graphie.nodies) {
-                System.out.print(n.id + " ");
+            for (int i = 0; i < numTransitions; i++) {
+                smallGraph.get(in.getInt()).add(in.getInt());
             }
             System.out.println();
+            System.out.println(smallGraph);
+            //allGraphs.add(smallGraph);
+
+            countIncomingOutgoingEdges(smallGraph, incoming, outgoing);
+
+            for (int i = 0; i < incoming.length; i++) {
+                System.out.println("incoming in " + i + " " + incoming[i]);
+
+            }
+            for (int i = 0; i < outgoing.length; i++) {
+                System.out.println("outgoing from " + i +" "+ outgoing[i]);
+
+            }
+
+
+            for (int at = 0; at < smallGraph.size(); at++) {
+                if(incoming[at]-outgoing[at]>0) System.out.println("bigger than");
+                if(incoming[at]-outgoing[at]<0) System.out.println("smaller than");
+
+
+            }
+
         }
-        in.close();
+
+
+
+
 
 
     }
+
+    private static void countIncomingOutgoingEdges(ArrayList<LinkedList<Integer>> smallGraph, int[] incoming, int[] outgoing) {
+        for (int from = 0; from < smallGraph.size(); from++) {
+            for (int to : smallGraph.get(from)) {
+                incoming[to]++;
+                outgoing[from]++;
+            }
+        }
+
+    }
+
+
+    static class Graph{
+
+
+
+    }
+
 
 }
 
 
-class Graph {
-    ArrayList<Node> nodies;
-
-    Graph() {
-        this.nodies = new ArrayList<Node>();
-    }
-
-    class Node {
-        int id;
-        ArrayList<Edge> edgies;
-
-        Node(int id) {
-            this.edgies = new ArrayList<>();
-            this.id = id;
-        }
-
-    }
-
-    class Edge {
-        // members
-        int from;
-        int to;
-
-        // constructor to transition
-        Edge(int from, int to) {
-            this.from = from;
-            this.to = to;
-        }
-
-    }
-}
