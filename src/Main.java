@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Main {
@@ -5,76 +6,73 @@ public class Main {
     public static void main(String[] args) {
 
         Kattio in = new Kattio(System.in, System.out);
-        //ArrayList<ArrayList<LinkedList<Integer>>> allGraphs = new ArrayList<>();
-        ArrayList<LinkedList<Integer>> smallGraph = new ArrayList<>();
-        int[] incoming;
-        int[] outgoing;
-
 
         while (in.hasMoreTokens()) {
-            int numbVertices = in.getInt();
-            int numTransitions = in.getInt();
+            int vertices = in.getInt();
+            int numbEdges = in.getInt();
+            ArrayList<LinkedList<Integer>> nodes = new ArrayList<>();
 
-            incoming = new int[numTransitions];
-            outgoing = new int[numTransitions];
-
-
-            for (int i = 0; i < numbVertices; i++) {
-                smallGraph.add(new LinkedList<>());
+            for (int i = 0; i < vertices; i++) {
+                nodes.add(new LinkedList<>());
             }
-            for (int i = 0; i < numTransitions; i++) {
-                smallGraph.get(in.getInt()).add(in.getInt());
-            }
-            System.out.println();
-            System.out.println(smallGraph);
-            //allGraphs.add(smallGraph);
+            Graph graph = new Graph(nodes, vertices, numbEdges);
 
-            countIncomingOutgoingEdges(smallGraph, incoming, outgoing);
+            for (int i = 0; i < numbEdges; i++) {
+                int from = in.getInt();
+                System.out.println("from " + from);
 
-            for (int i = 0; i < incoming.length; i++) {
-                System.out.println("incoming in " + i + " " + incoming[i]);
+                int to = in.getInt();
+                System.out.println("to "+ to);
+                graph.incoming[to]++;
+                graph.outgoing[from]++;
+                nodes.get(from).add(to);
 
             }
-            for (int i = 0; i < outgoing.length; i++) {
-                System.out.println("outgoing from " + i +" "+ outgoing[i]);
-
+            for(LinkedList<Integer> n: nodes){
+                System.out.println(n);
+            }
+            for(int i=0 ; i <graph.incoming.length; i++){
+                System.out.print("incoming in " + i + " ");
+                System.out.println(graph.incoming[i]);
+            }
+            for(int i=0 ; i <graph.outgoing.length; i++){
+                System.out.print("outgoing from " + i + " ");
+                System.out.println(graph.outgoing[i]);
             }
 
-
-            for (int at = 0; at < smallGraph.size(); at++) {
-                if(incoming[at]-outgoing[at]>0) System.out.println("bigger than");
-                if(incoming[at]-outgoing[at]<0) System.out.println("smaller than");
+            isAPathPossible(graph, graph.incoming, graph.outgoing);
 
 
-            }
+
 
         }
-
-
-
-
-
 
     }
 
-    private static void countIncomingOutgoingEdges(ArrayList<LinkedList<Integer>> smallGraph, int[] incoming, int[] outgoing) {
-        for (int from = 0; from < smallGraph.size(); from++) {
-            for (int to : smallGraph.get(from)) {
-                incoming[to]++;
-                outgoing[from]++;
-            }
-        }
-
+    private static void isAPathPossible(Graph graph, int[] incoming, int[] outgoing) {
     }
 
 
     static class Graph{
+        ArrayList<LinkedList<Integer>> nodes;
+        int numbEdges;
+        int vertices;
+        int[] incoming;
+        int[] outgoing;
 
+        Graph(ArrayList<LinkedList<Integer>> nodes, int vertices, int numbEdges){
+            this.nodes = nodes;
+            this.vertices = vertices;
+            this.numbEdges = numbEdges;
+            this.incoming = new int[vertices];
+            this.outgoing = new int[vertices];
 
-
+        }
     }
 
 
 }
+
+
 
 
